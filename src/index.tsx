@@ -1,11 +1,22 @@
-import { StrictMode } from "react"
 import { render } from "react-dom"
+import { BrowserRouter as Router } from "react-router-dom"
+import { RecoilRoot } from "recoil"
+
+import { register } from "./serviceWorkerRegistration"
+
 import "./index.scss"
-import App from "./App"
+import WithAuth from "./layouts/WithAuth"
+import App from "./layouts/App"
 
 render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
+  <RecoilRoot>
+    <Router>
+      <WithAuth>
+        <App />
+      </WithAuth>
+    </Router>
+  </RecoilRoot>,
   document.getElementById("root")
 )
+
+register()

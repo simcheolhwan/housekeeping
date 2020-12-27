@@ -1,0 +1,15 @@
+{
+  "short_name": "가계부",
+  "name": "가계부",
+  "icons": [
+    {
+      "src": "apple-touch-icon.png",
+      "type": "image/png",
+      "sizes": "180x180"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000",
+  "background_color": "#000"
+}
