@@ -24,7 +24,12 @@ const CostList = ({ list }: { list: List }) => {
 
   return (
     <Page title="고정비">
-      <Table dataSource={dataSource} pagination={false} rowKey="month">
+      <Table
+        dataSource={dataSource}
+        pagination={false}
+        size="small"
+        rowKey="month"
+      >
         <Column
           dataIndex="month"
           title="날짜"
@@ -40,7 +45,7 @@ const CostList = ({ list }: { list: List }) => {
           dataIndex="amount"
           title="금액"
           render={formatAmount}
-          align="right"
+          align="center"
         />
       </Table>
     </Page>

@@ -1,16 +1,6 @@
-import { atom, selector } from "recoil"
+import { selector } from "recoil"
 import { contentsState } from "./database"
-
-export const yearState = atom({ key: "year", default: "2020" })
-
-export const yearDataQuery = selector({
-  key: "yearData",
-  get: ({ get }) => {
-    const year = get(yearState)
-    const { annual } = get(contentsState)
-    return annual[year]
-  },
-})
+import { yearDataQuery } from "./year"
 
 export const incomeTotalQuery = selector({
   key: "incomeTotal",

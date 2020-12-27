@@ -48,3 +48,8 @@ export const useDatabase = () => {
     })
   }, [setDatabase])
 }
+
+export const setItem = async (
+  list: List,
+  { year, type, title }: { year: string; type: Type; title: string }
+) => await db.ref(`/annual/${year}/${type}/${title}`).set(list)
