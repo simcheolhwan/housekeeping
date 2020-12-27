@@ -22,7 +22,7 @@ const Dashboard = () => {
 
   return (
     <Page>
-      <Space align="start">
+      <Space align="start" wrap>
         <Table dataSource={income.list} pagination={false} rowKey="title">
           <Column
             dataIndex="title"

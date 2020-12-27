@@ -45,7 +45,7 @@ export const accountsTotalQuery = selector({
 })
 
 /* calc */
-const calcSubtotal = (list: List) =>
+export const calcSubtotal = (list: List) =>
   list.reduce((acc, { amount }) => acc + amount, 0)
 
 const parsed = (obj: Dictionary<List>) =>

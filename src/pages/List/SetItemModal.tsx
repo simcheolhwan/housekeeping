@@ -36,6 +36,7 @@ const SetItemModal = ({ type, title, index }: Props) => {
       type={Number.isInteger(index) ? "edit" : "add"}
       form={{ form, initialValues }}
       submit={submit}
+      prefix={title}
     >
       <Form.Item name="month" label="월" rules={[{ required: true }]}>
         <Input type="number" />

@@ -29,6 +29,7 @@ const CostList = ({ list }: { list: List }) => {
         pagination={false}
         size="small"
         rowKey="month"
+        scroll={{ x: true }}
       >
         <Column
           dataIndex="month"

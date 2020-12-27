@@ -7,9 +7,10 @@ interface Props {
   form: FormProps
   type: "add" | "edit"
   submit: () => Promise<void>
+  prefix?: string
 }
 
-const SetModal: FC<Props> = ({ form, type, submit, children }) => {
+const SetModal: FC<Props> = ({ form, type, submit, children, prefix }) => {
   const { isOpen, open, close } = useModal()
 
   const onSet = async () => {
@@ -18,6 +19,7 @@ const SetModal: FC<Props> = ({ form, type, submit, children }) => {
   }
 
   /* render */
+  const withPrefix = (str: string) => [prefix, str].filter(Boolean).join(" ")
   const button = {
     add: { type: "default" as const, children: "추가하기" },
     edit: { type: "text" as const, children: "편집" },
@@ -28,7 +30,7 @@ const SetModal: FC<Props> = ({ form, type, submit, children }) => {
       <Button {...button[type]} onClick={open} />
 
       <Modal
-        title={button[type].children}
+        title={withPrefix(button[type].children)}
         visible={isOpen}
         onOk={onSet}
         onCancel={close}
