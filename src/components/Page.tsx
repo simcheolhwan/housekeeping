@@ -2,11 +2,16 @@ import { FC, ReactNode } from "react"
 import { PageHeader } from "antd"
 import { useTitle } from "../routes"
 
-const Page: FC<{ extra?: ReactNode }> = ({ children, extra }) => {
+interface Props {
+  title?: string
+  extra?: ReactNode
+}
+
+const Page: FC<Props> = ({ children, extra, ...props }) => {
   const title = useTitle()
 
   return (
-    <PageHeader title={title} extra={extra}>
+    <PageHeader title={props.title ?? title} extra={extra}>
       {children}
     </PageHeader>
   )

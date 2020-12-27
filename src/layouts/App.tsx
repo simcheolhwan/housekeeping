@@ -3,6 +3,7 @@ import { useRecoilValue } from "recoil"
 import { Layout } from "antd"
 import { loadingState, useDatabase } from "../database/database"
 import Loading from "../components/Loading"
+import List from "../pages/List/List"
 import routes from "../routes"
 import Nav from "./Nav"
 
@@ -24,6 +25,8 @@ const App = () => {
             {routes.map((route) => (
               <Route {...route} exact={route.path === "/"} key={route.path} />
             ))}
+
+            <Route path="/list" component={List} />
           </Switch>
         )}
       </Content>

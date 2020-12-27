@@ -1,35 +1,38 @@
-import { selector, selectorFamily } from "recoil"
+import { atom, selector } from "recoil"
 import { contentsState } from "./database"
 
-export const yearDataQuery = selectorFamily({
-  key: "year",
-  get: (year: string) => ({ get }) => {
+export const yearState = atom({ key: "year", default: "2020" })
+
+export const yearDataQuery = selector({
+  key: "yearData",
+  get: ({ get }) => {
+    const year = get(yearState)
     const { annual } = get(contentsState)
     return annual[year]
   },
 })
 
-export const incomeTotalQuery = selectorFamily({
+export const incomeTotalQuery = selector({
   key: "incomeTotal",
-  get: (year: string) => ({ get }) => {
-    const { income } = get(yearDataQuery(year))
+  get: ({ get }) => {
+    const { income } = get(yearDataQuery)
     return calcTotal(income)
   },
 })
 
-export const expenseTotalQuery = selectorFamily({
+export const expenseTotalQuery = selector({
   key: "expenseTotal",
-  get: (year: string) => ({ get }) => {
-    const { expense } = get(yearDataQuery(year))
+  get: ({ get }) => {
+    const { expense } = get(yearDataQuery)
     return calcTotal(expense)
   },
 })
 
-export const balanceQuery = selectorFamily({
+export const balanceQuery = selector({
   key: "balance",
-  get: (year: string) => ({ get }) => {
-    const income = get(incomeTotalQuery(year))
-    const expense = get(expenseTotalQuery(year))
+  get: ({ get }) => {
+    const income = get(incomeTotalQuery)
+    const expense = get(expenseTotalQuery)
     return income.total - expense.total
   },
 })
@@ -52,24 +55,13 @@ export const accountsTotalQuery = selector({
 })
 
 /* calc */
-const title: Dictionary<string> = {
-  salary: "급여",
-  bonus: "상여금",
-  sale: "판매",
-  tax: "세금",
-  cost: "고정비",
-  consume: "소비",
-  invest: "투자",
-}
-
 const calcSubtotal = (list: List) =>
   list.reduce((acc, { amount }) => acc + amount, 0)
 
-const parsed = (obj: Record<string, List>) =>
-  Object.entries(obj).map(([name, list]) => ({
-    title: title[name],
-    subtotal: calcSubtotal(list),
-  }))
+const parsed = (obj: Dictionary<List>) =>
+  Object.entries(obj)
+    .map(([title, list]) => ({ title, subtotal: calcSubtotal(list) }))
+    .sort(({ subtotal: a }, { subtotal: b }) => b - a)
 
 const calcTotal = (obj: Record<string, List>) => {
   const list = parsed(obj)

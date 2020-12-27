@@ -4,21 +4,17 @@ interface Database {
 }
 
 interface Year {
-  income: {
-    salary: List
-    bonus: List
-    sale: List
-  }
-  expense: {
-    tax: List
-    cost: List
-    consume: List
-    invest: List
-  }
+  income: Dictionary<List>
+  expense: Dictionary<List>
 }
 
+type Type = "income" | "expense"
 type List = Item[]
+
 interface Item {
-  M: number
+  month: number
   amount: number
+  category?: string
+  content?: string
+  memo?: string
 }
