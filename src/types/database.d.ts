@@ -1,6 +1,7 @@
 interface Database {
   accounts: Dictionary<number>
   annual: Dictionary<Year>
+  cost: Dictionary<number>
 }
 
 interface Year {

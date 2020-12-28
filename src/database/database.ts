@@ -5,6 +5,7 @@ import { db } from "../firebase"
 const initial = {
   accounts: {},
   annual: {},
+  cost: {},
 }
 
 const init = () => {
