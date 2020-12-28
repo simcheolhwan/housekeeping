@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 import { useRecoilValue } from "recoil"
-import { Space, Table } from "antd"
+import { Space, Table, Tooltip, Typography } from "antd"
 import { stringify } from "qs"
 import { formatAmount } from "../../utils/format"
 import Page from "../../components/Page"
@@ -8,6 +8,7 @@ import { expenseTotalQuery, incomeTotalQuery } from "../../database/dashboard"
 import { balanceQuery, accountsTotalQuery } from "../../database/dashboard"
 
 const { Column } = Table
+const { Text } = Typography
 
 const Dashboard = () => {
   const income = useRecoilValue(incomeTotalQuery)
@@ -60,10 +61,21 @@ const Dashboard = () => {
           rowKey="name"
         >
           <Column dataIndex="name" title="계좌" />
-          <Column
+          <Column<{ name: string }>
             dataIndex="balance"
             title={formatAmount(balance)}
-            render={formatAmount}
+            render={(amount, { name }) => {
+              const diff = balance - amount
+              const invalid = name === "합계" && diff
+
+              return invalid ? (
+                <Tooltip title={formatAmount(diff)}>
+                  <Text type="danger">{formatAmount(amount)}</Text>
+                </Tooltip>
+              ) : (
+                formatAmount(amount)
+              )
+            }}
             align="right"
           />
         </Table>
