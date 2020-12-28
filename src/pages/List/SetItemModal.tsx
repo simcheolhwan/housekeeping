@@ -23,8 +23,8 @@ const SetItemModal = ({ type, title, index }: Props) => {
     : { month: getMonth() }
 
   const submit = async () => {
-    const values = await form.validateFields()
-    const item: Item = pickBy((value) => value, values)
+    const { amount, ...values } = await form.validateFields()
+    const item: Item = { ...pickBy((v) => v, values), amount: Number(amount) }
     await setItem(
       Number.isInteger(index) ? update(index!, item, list) : [...list, item],
       { year, type, title }
