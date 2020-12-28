@@ -49,6 +49,9 @@ export const useDatabase = () => {
   }, [setDatabase])
 }
 
+export const setAccount = async (name: string, amount: number) =>
+  await db.ref(`/accounts/${name}`).set(amount)
+
 export const setItem = async (
   list: List,
   { year, type, title }: { year: string; type: Type; title: string }

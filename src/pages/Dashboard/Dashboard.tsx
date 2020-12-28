@@ -4,6 +4,7 @@ import { Space, Table, Tooltip, Typography } from "antd"
 import { stringify } from "qs"
 import { formatAmount } from "../../utils/format"
 import Page from "../../components/Page"
+import { setAccount } from "../../database/database"
 import { expenseTotalQuery, incomeTotalQuery } from "../../database/dashboard"
 import { balanceQuery, accountsTotalQuery } from "../../database/dashboard"
 
@@ -19,6 +20,11 @@ const Dashboard = () => {
   const renderLink = (type: Type) => (title: string) => {
     const search = stringify({ title })
     return <Link to={{ pathname: "/list", hash: type, search }}>{title}</Link>
+  }
+
+  const handleClick = (name: string, balance: number) => {
+    const input = window.prompt("잔고:", String(balance))
+    input && setAccount(name, Number(input))
   }
 
   return (
@@ -54,26 +60,28 @@ const Dashboard = () => {
 
         <Table
           dataSource={[
-            { name: "합계", balance: accounts.total },
+            { name: "계좌", balance: accounts.total },
             ...accounts.list,
           ]}
           pagination={false}
           rowKey="name"
         >
-          <Column dataIndex="name" title="계좌" />
+          <Column dataIndex="name" title="잔액" />
           <Column<{ name: string }>
             dataIndex="balance"
             title={formatAmount(balance)}
             render={(amount, { name }) => {
               const diff = balance - amount
-              const invalid = name === "합계" && diff
+              const content = formatAmount(amount)
 
-              return invalid ? (
+              return name !== "계좌" ? (
+                <span onClick={() => handleClick(name, amount)}>{content}</span>
+              ) : diff ? (
                 <Tooltip title={formatAmount(diff)}>
-                  <Text type="danger">{formatAmount(amount)}</Text>
+                  <Text type="danger">{content}</Text>
                 </Tooltip>
               ) : (
-                formatAmount(amount)
+                content
               )
             }}
             align="right"
