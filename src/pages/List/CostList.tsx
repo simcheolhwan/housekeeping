@@ -2,27 +2,43 @@ import { useRecoilValue } from "recoil"
 import { Table } from "antd"
 import { last, update, without } from "ramda"
 import { formatAmount, formatMonth } from "../../utils/format"
-import { contentsState } from "../../database/database"
+import { contentsState, setItem } from "../../database/database"
+import { yearState } from "../../database/year"
 import Page from "../../components/Page"
 
 const { Column } = Table
 
+const type = "expense"
+const title = "고정비"
+
+type Row = Dictionary<number>
+
 const CostList = ({ list }: { list: List }) => {
   const { cost } = useRecoilValue(contentsState)
+  const year = useRecoilValue(yearState)
 
-  const dataSource = list.reduce<Dictionary<number>[]>(
-    (acc, { month, content, amount }) => {
-      const length = acc.length
-      const index = length - 1
-      const prev = acc[index]
-      const cur = { [content!]: amount }
+  const handleClick = (key: string, { month, ...row }: Row) => {
+    const input = prompt("액수:", String(row[key]))
+    const index = list.findIndex(
+      (item) => item.month === month && item.content === key
+    )
 
-      return prev?.month === month
-        ? update(index, { ...prev, ...cur, amount: prev.amount + amount }, acc)
-        : [...acc, { month, ...cur, amount }]
-    },
-    []
-  )
+    if (input) {
+      const next = { ...list[index], amount: Number(input) }
+      setItem(update(index, next, list), { year, type, title })
+    }
+  }
+
+  const dataSource = list.reduce<Row[]>((acc, { month, content, amount }) => {
+    const length = acc.length
+    const index = length - 1
+    const prev = acc[index]
+    const cur = { [content!]: amount }
+
+    return prev?.month === month
+      ? update(index, { ...prev, ...cur, amount: prev.amount + amount }, acc)
+      : [...acc, { month, ...cur, amount }]
+  }, [])
 
   const columns = without(["month", "amount"], Object.keys(dataSource[0]))
 
@@ -43,7 +59,15 @@ const CostList = ({ list }: { list: List }) => {
         />
 
         {columns.map((key) => (
-          <Column dataIndex={key} title={key} align="center" key={key} />
+          <Column<Row>
+            dataIndex={key}
+            title={key}
+            render={(value, record) => (
+              <span onClick={() => handleClick(key, record)}>{value}</span>
+            )}
+            align="center"
+            key={key}
+          />
         ))}
 
         <Column
