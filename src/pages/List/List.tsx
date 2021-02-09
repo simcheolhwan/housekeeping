@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom"
 import { useRecoilValue } from "recoil"
 import { Select, Space, Tabs } from "antd"
 import { uniq } from "ramda"
-import { formatMonth } from "../../utils/format"
+import { formatMonth, getMonth } from "../../utils/format"
 import { typeDataQuery } from "../../database/year"
 import Page from "../../components/Page"
 import CommonList from "./CommonList"
@@ -25,7 +25,7 @@ const List = () => {
   const indexed = list.map((item, index) => ({ ...item, index }))
 
   /* filter */
-  const [month, setMonth] = useState<string>("")
+  const [month, setMonth] = useState<string>(String(getMonth()))
   const [cat, setCat] = useState<string>("")
   const showFilter = title === "소비"
 
