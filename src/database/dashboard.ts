@@ -31,16 +31,8 @@ export const accountsTotalQuery = selector({
   key: "accountsTotal",
   get: ({ get }) => {
     const { accounts } = get(contentsState)
-    const total = Object.values(accounts).reduce(
-      (acc, balance) => acc + balance,
-      0
-    )
-
-    const list = Object.entries(accounts).map(([name, balance]) => {
-      return { name, balance }
-    })
-
-    return { total, list }
+    const total = accounts.reduce((acc, { balance }) => acc + balance, 0)
+    return { total, list: accounts }
   },
 })
 

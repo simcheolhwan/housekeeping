@@ -1,5 +1,10 @@
+interface AccountItem {
+  name: string
+  balance: number
+}
+
 interface Database {
-  accounts: Dictionary<number>
+  accounts: AccountItem[]
   annual: Dictionary<Year>
   cost: Dictionary<number>
 }

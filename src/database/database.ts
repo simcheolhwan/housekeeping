@@ -3,7 +3,7 @@ import { atom, selector, useSetRecoilState } from "recoil"
 import { db } from "../firebase"
 
 const initial = {
-  accounts: {},
+  accounts: [],
   annual: {},
   cost: {},
 }
@@ -50,8 +50,8 @@ export const useDatabase = () => {
   }, [setDatabase])
 }
 
-export const setAccount = async (name: string, amount: number) =>
-  await db.ref(`/accounts/${name}`).set(amount)
+export const setAccounts = async (accounts: AccountItem[]) =>
+  await db.ref(`/accounts`).set(accounts)
 
 export const setItem = async (
   list: List,

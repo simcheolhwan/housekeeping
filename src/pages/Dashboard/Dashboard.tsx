@@ -4,7 +4,7 @@ import { Space, Table, Tooltip, Typography } from "antd"
 import { stringify } from "qs"
 import { formatAmount } from "../../utils/format"
 import Page from "../../components/Page"
-import { setAccount } from "../../database/database"
+import { setAccounts } from "../../database/database"
 import { expenseTotalQuery, incomeTotalQuery } from "../../database/dashboard"
 import { balanceQuery, accountsTotalQuery } from "../../database/dashboard"
 
@@ -24,7 +24,11 @@ const Dashboard = () => {
 
   const handleClick = (name: string, balance: number) => {
     const input = window.prompt("잔고:", String(balance))
-    input && setAccount(name, Number(input))
+    const next: AccountItem[] = accounts.list.map((account) =>
+      account.name === name ? { name, balance: Number(input) } : account
+    )
+
+    input && setAccounts(next)
   }
 
   return (
