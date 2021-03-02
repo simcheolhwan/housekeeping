@@ -22,10 +22,19 @@ const Dashboard = () => {
     return <Link to={{ pathname: "/list", hash: type, search }}>{title}</Link>
   }
 
-  const handleClick = (name: string, balance: number) => {
-    const input = window.prompt("잔고:", String(balance))
+  const changeName = (name: string) => {
+    const input = window.prompt("이름:", name) || ""
     const next: AccountItem[] = accounts.list.map((account) =>
-      account.name === name ? { name, balance: Number(input) } : account
+      account.name === name ? { ...account, name: input } : account
+    )
+
+    input && setAccounts(next)
+  }
+
+  const changeBalance = (name: string, balance: number) => {
+    const input = window.prompt("잔고:", String(balance)) || ""
+    const next: AccountItem[] = accounts.list.map((account) =>
+      account.name === name ? { ...account, balance: Number(input) } : account
     )
 
     input && setAccounts(next)
@@ -70,7 +79,17 @@ const Dashboard = () => {
           pagination={false}
           rowKey="name"
         >
-          <Column dataIndex="name" title="잔액" />
+          <Column
+            dataIndex="name"
+            title="잔액"
+            render={(name) =>
+              name !== "계좌" ? (
+                <span onClick={() => changeName(name)}>{name}</span>
+              ) : (
+                name
+              )
+            }
+          />
           <Column<{ name: string }>
             dataIndex="balance"
             title={formatAmount(balance)}
@@ -79,7 +98,9 @@ const Dashboard = () => {
               const content = formatAmount(amount)
 
               return name !== "계좌" ? (
-                <span onClick={() => handleClick(name, amount)}>{content}</span>
+                <span onClick={() => changeBalance(name, amount)}>
+                  {content}
+                </span>
               ) : diff ? (
                 <Tooltip title={formatAmount(diff)}>
                   <Text type="danger">{content}</Text>
