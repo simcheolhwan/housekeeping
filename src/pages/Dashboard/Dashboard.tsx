@@ -60,7 +60,7 @@ const Dashboard = () => {
         <Table dataSource={expense.list} pagination={false} rowKey="title">
           <Column
             dataIndex="title"
-            title="지출"
+            title={<Link to="/expense">지출</Link>}
             render={renderLink("expense")}
           />
           <Column
