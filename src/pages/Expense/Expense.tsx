@@ -25,11 +25,13 @@ const Expense = () => {
         생활비: calcSubtotal(byMonth.filter(isLivingCost)),
       }
 
-      return Object.assign(
-        {},
-        acc,
-        key === "고정비" ? fixedCost : { [key]: calcSubtotal(byMonth) }
-      )
+      return key === "차량"
+        ? acc
+        : Object.assign(
+            {},
+            acc,
+            key === "고정비" ? fixedCost : { [key]: calcSubtotal(byMonth) }
+          )
     }, {})
 
   const byYear = months.reduce<ByYear>(
