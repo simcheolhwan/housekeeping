@@ -1,5 +1,5 @@
 import { useRecoilValue } from "recoil"
-import { Table } from "antd"
+import { Button, Table } from "antd"
 import { last, update, without } from "ramda"
 import { formatAmount, formatMonth } from "../../utils/format"
 import { contentsState, setItem } from "../../database/database"
@@ -17,7 +17,16 @@ const CostList = ({ list }: { list: List }) => {
   const { cost } = useRecoilValue(contentsState)
   const year = useRecoilValue(yearState)
 
-  const handleClick = (key: string, { month, ...row }: Row) => {
+  const addMonth = async () => {
+    const { month } = list[list.length - 1]
+    const next = list
+      .filter((item) => item.month === month)
+      .map((item) => ({ ...item, amount: 0, month: month + 1 }))
+
+    await setItem([...list, ...next], { year, type, title })
+  }
+
+  const handleClick = async (key: string, { month, ...row }: Row) => {
     const input = prompt("액수:", String(row[key]))
     const index = list.findIndex(
       (item) => item.month === month && item.content === key
@@ -25,7 +34,7 @@ const CostList = ({ list }: { list: List }) => {
 
     if (input) {
       const next = { ...list[index], amount: Number(input) }
-      setItem(update(index, next, list), { year, type, title })
+      await setItem(update(index, next, list), { year, type, title })
     }
   }
 
@@ -43,7 +52,7 @@ const CostList = ({ list }: { list: List }) => {
   const columns = without(["month", "amount"], Object.keys(dataSource[0]))
 
   return (
-    <Page title="고정비">
+    <Page title="고정비" extra={<Button onClick={addMonth}>다음</Button>}>
       <Table
         dataSource={dataSource}
         pagination={false}
