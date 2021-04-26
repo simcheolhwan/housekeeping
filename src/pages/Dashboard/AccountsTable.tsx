@@ -69,14 +69,18 @@ const AccountsTable = () => {
       <Column<{ name: string }>
         dataIndex="balance"
         title={formatAmount(balance)}
-        render={(amount, { name }) => {
-          const diff = balance - amount
-          const content = formatAmount(amount)
+        render={(account, { name }) => {
+          const content = formatAmount(account)
+
+          const diff = account - balance
+          const prefix = "계좌에"
+          const suffix = diff > 0 ? "많음" : "적음"
+          const tooltip = [prefix, formatAmount(Math.abs(diff)), suffix]
 
           return name !== "계좌" ? (
-            <span onClick={() => changeBalance(name, amount)}>{content}</span>
+            <span onClick={() => changeBalance(name, account)}>{content}</span>
           ) : diff ? (
-            <Tooltip title={formatAmount(diff)}>
+            <Tooltip title={tooltip.join(" ")}>
               <Text type="danger">{content}</Text>
             </Tooltip>
           ) : (
