@@ -25,7 +25,7 @@ const Expense = () => {
         생활비: calcSubtotal(byMonth.filter(isLivingCost)),
       }
 
-      return key === "차량"
+      return ["투자", "차량"].includes(key)
         ? acc
         : Object.assign(
             {},
